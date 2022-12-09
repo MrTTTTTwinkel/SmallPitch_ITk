@@ -191,25 +191,25 @@
 (sdedr:define-refinement-placement "PsprayRefPlac" "PsprayRefSize" "PsprayRefWin")
 
 ;;***********************************************************
-;;-----------------------------------------------------N Surface
+;;-----------------------------------------------------N++ Surface, refine the N++ laterall diffusion at the surface
 (sdedr:define-refeval-window "NSurfaceRefWin" "Cuboid"  (position 0 0 0)  (position NLateral 0.05 NLateral)) 	;global mesh
 (sdedr:define-refinement-size "NSurfaceRefSize" MaxMeshSize 0.01 MaxMeshSize 0.05 0.005 0.05);1 3 1 0.5 1.5 0.5
 (sdedr:define-refinement-placement "NSurfaceRefPlac" "NSurfaceRefSize" "NSurfaceRefWin")
 
 ;;***********************************************************
-;;-----------------------------------------------------N Pspray
+;;-----------------------------------------------------N++ Pspray, refine the N++ laterall diffusion at the Pspray/Surface
 (sdedr:define-refeval-window "NPsprayRefWin" "Cuboid"  (position 0 0 0)  (position NLateral 1 NLateral)) 	;global mesh
 (sdedr:define-refinement-size "NPsprayRefSize" MaxMeshSize 0.1 MaxMeshSize 0.05 0.05 0.05);1 3 1 0.5 1.5 0.5
 (sdedr:define-refinement-placement "NPsprayRefPlac" "NPsprayRefSize" "NPsprayRefWin")
 
 ;;***********************************************************
-;;-----------------------------------------------------N Lateral
+;;-----------------------------------------------------N++ Lateral, refine the N++ laterall diffusion
 (sdedr:define-refeval-window "NLateralRefWin" "Cuboid"  (position 0 0 0)  (position NLateral ElectrodeRectHeight NLateral)) 	;global mesh
 (sdedr:define-refinement-size "NLateralRefSize" MaxMeshSize 3 MaxMeshSize 0.05 1.5 0.05);1 3 1 0.5 1.5 0.5
 (sdedr:define-refinement-placement "NLateralRefPlac" "NLateralRefSize" "NLateralRefWin")
 ;;(sdedr:define-refinement-region "NLateralRefPlac" "NLateralRefSize" "NLateralCy")
 ;;***********************************************************
-;;-----------------------------------------------------N Tip
+;;-----------------------------------------------------N++ Tip
 (sdedr:define-refeval-window "NTipRefWin" "Cuboid"  (position 0 ElectrodeRectHeight 0)  (position NLateral (+ ElectrodeHeight (- LateralDepth 0.2)) NLateral)) 	;global mesh
 (sdedr:define-refinement-size "NTipRefSize" MaxMeshSize MaxMeshSize MaxMeshSize 0.05 0.05 0.05);1 3 1 0.5 1.5 0.5
 (sdedr:define-refinement-placement "NTipRefPlac" "NTipRefSize" "NTipRefWin")
@@ -229,19 +229,19 @@
 (sdedr:define-refinement-placement "PPsprayRefPlac" "PPsprayRefSize" "PPsprayRefWin")
 
 ;;***********************************************************
-;;-----------------------------------------------------P Lateral
+;;-----------------------------------------------------P++ Lateral
 (sdedr:define-refeval-window "PLateralRefWin" "Cuboid"  (position (- SubX PLateral) 0 (- SubZ PLateral))  (position SubX SubY SubZ)) 	;global mesh
 (sdedr:define-refinement-size "PLateralRefSize" MaxMeshSize 3 MaxMeshSize 0.05 1.5 0.05);1 3 1 0.5 1.5 0.5
 (sdedr:define-refinement-placement "PLateralRefPlac" "PLateralRefSize" "PLateralRefWin")
 ;;(sdedr:define-refinement-region "PLateralRefPlac" "PLateralRefSize" "PLateralCy")
 ;;***********************************************************
-;;-----------------------------------------------------P Btm junction
+;;-----------------------------------------------------P++ Btm junction
 (sdedr:define-refeval-window "PBtmRefWin" "Cuboid"  (position (- SubX PLateral) (- SubY BackDiff) (- SubZ PLateral))  (position SubX SubY SubZ)) 	;global mesh
 (sdedr:define-refinement-size "PBtmRefSize" MaxMeshSize 1 MaxMeshSize 0.05 0.5 0.05)
 (sdedr:define-refinement-placement "PBtmRefPlac" "PBtmRefSize" "PBtmRefWin")
 
 ;;***********************************************************
-;;-----------------------------------------------------P Back Diff
+;;-----------------------------------------------------P++ Back Diff
 (sdedr:define-refeval-window "PBackRefWin" "Cuboid"  (position 0 (- SubY BackDiff) 0)  (position SubX SubY SubZ)) 	;global mesh
 (sdedr:define-refinement-size "PBackRefSize" 1 1 1 0.5 0.25 0.5);1 3 1 0.5 1.5 0.5
 (sdedr:define-refinement-placement "PBackRefPlac" "PBackRefSize" "PBackRefWin")
