@@ -1,4 +1,4 @@
-;;
+;;It is not clear how Sentaurus handles PolySi, so it is recommoned to dope the N++ electrode/Bulk interface, instead of filling the N++ Cylinder with PolySi
 ;; Single Side 3D for ITk
 ;; When doping the N electrode, the Poly and the Columnar have to be doped seperately
 ;; Define geometry
@@ -8,7 +8,7 @@
 (define PolyStartY (+ BtmOxide MidOxide))
 (define PolyCenterY (/ (+ PolyStartY BtmOxide) 2))
 (define OxideThickness (+ (+ TopOxide MidOxide) BtmOxide))
-(define ElectrodeRadius @radius@)
+(define ElectrodeRadius @radius@);;2.0 2.5 3 3.5 4.0
 (define ElectrodeDiameter (* ElectrodeRadius 2))
 (define SubX 25)
 (define SubZ SubX)
@@ -18,7 +18,7 @@
 (define DiffLength 1)
 
 (define BackDiff 10)
-(define TiptoBtmGap (+ @gap@ BackDiff))
+(define TiptoBtmGap (+ @gap@ BackDiff));;15 20 25 30
 
 (define ElectrodeHeight (- SubY TiptoBtmGap))
 (define ElectrodeRectHeight (- ElectrodeHeight (* ElectrodeRadius 2)))
@@ -83,8 +83,9 @@
 (sdegeo:delete-region (find-body-id (position 1 1 1)));delete N++
 ;;(sdegeo:delete-region (find-body-id (position 0.1 (+ ElectrodeRectHeight 1) 0.1)));delete N++
 
-
+;;To calculate a Arbitrary point of the cylinder/bulk interface
 (define tmp (/ ElectrodeRadius 1.41421356237))
+;;To calculate a Arbitrary point of the ellipsoid/bulk interface
 (define ellp_tmp (+ ElectrodeRectHeight 2.82842712475))
 
 
