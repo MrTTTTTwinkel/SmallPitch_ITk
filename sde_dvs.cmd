@@ -52,8 +52,6 @@
 ;;(sdegeo:create-cylinder (position SubX 0 SubZ)  (position SubX SubY SubZ) PLateral "Silicon" "PLateralCy")
 
 
-
-
 ;;Doping the bulk
 (sdedr:define-constant-profile "SubConDoping" "BoronActiveConcentration" SubCon)
 (sdedr:define-constant-profile-material "SubConDopingPlac" "SubConDoping" "Silicon")
@@ -84,11 +82,11 @@
 ;;(sdegeo:delete-region (find-body-id (position 0.1 (+ ElectrodeRectHeight 1) 0.1)));delete N++
 
 ;;To calculate a Arbitrary point of the cylinder/bulk interface
+;; x^2 + z^2 = R  --> x = z = R/sqrt(2)
 (define tmp (/ ElectrodeRadius 1.41421356237))
 ;;To calculate a Arbitrary point of the ellipsoid/bulk interface
+;;1/x^2 + 1/y^2 + 1/z^2 = 1, when x=z=R/2 --> y, an offset of ElectrodeRectHeight will be needed.
 (define ellp_tmp (+ ElectrodeRectHeight 2.82842712475))
-
-
 (cond
 	((= ElectrodeRadius 2.5)
 		(begin
@@ -117,41 +115,25 @@
 (extract-refwindow  (list (car (find-face-id (position (/ ElectrodeRadius 2) ellp_tmp (/ ElectrodeRadius 2))))) "BulkNElectrodeInterface_El")
 
 ;;-----------------------------------------------------------Gaussian causes jag-saw doping profile around the Tip, err function is better
-;;(sdedr:define-gaussian-profile "NElectrodeDoping_Cy" "PhosphorusActiveConcentration" "PeakPos" 0  "PeakVal" ElectrodeCon "ValueAtDepth" SubCon "Depth" 0.6 "Gauss" "Factor" 0.3)
-;;(sdedr:define-gaussian-profile "NElectrodeDoping_El" "PhosphorusActiveConcentration" "PeakPos" 0  "PeakVal" ElectrodeCon "ValueAtDepth" SubCon "Depth" 0.6 "Gauss" "Factor" 0.3)
 (sdedr:define-erf-profile "NElectrodeDoping_Cy" "PhosphorusActiveConcentration" "SymPos" 0  "MaxVal" ElectrodeCon "ValueAtDepth" SubCon "Length" 0.3 "Gauss"  "Factor" 0.3)
 (sdedr:define-erf-profile "NElectrodeDoping_El" "PhosphorusActiveConcentration" "SymPos" 0  "MaxVal" ElectrodeCon "ValueAtDepth" SubCon "Length" 0.3 "Gauss"  "Factor" 0.3)
 (sdedr:define-analytical-profile-placement "NEDopingPlac_Cy" "NElectrodeDoping_Cy" "BulkNElectrodeInterface_Cy" "Both" "NoReplace" "Eval")
 (sdedr:define-analytical-profile-placement "NEDopingPlac_El" "NElectrodeDoping_El" "BulkNElectrodeInterface_El" "Both" "NoReplace" "Eval")
 
-
 (define NCap (sdegeo:create-cylinder (position 0 PolyStartY 0)  (position 0 BtmOxide 0) CapRadius "Aluminum" "NCapRegion"));;PolySi
 (define NCylinder1 (sdegeo:create-cylinder (position 0 2 0)  (position 0 4 0) ElectrodeRadius "Silicon" "NContactCylinder"));;PolySi
-;;(sdegeo:bool-unite (list NCap NCylinder1))
-;;(sdedr:define-constant-profile "NCapDoping" "PhosphorusActiveConcentration" ElectrodeCon)
-;;(sdedr:define-constant-profile-region "NCapDopingPlac" "NCapDoping" "NCapRegion")
-
 
 ;;-----------------------------------------------------------
 ;;Define the p++ electrode
 (define PCylinder(sdegeo:create-cylinder (position SubX 0 SubZ)  (position SubX SubY SubZ) ElectrodeRadius "Silicon" "PCylinderRegion"))
-;;(extract-refpolyhedron PCylinder "BulkPElectrodeInterface")
 (sdegeo:delete-region (find-body-id (position (- SubX 1) 1 (- SubZ 1))));delete P++
 (extract-refwindow  (list (car (find-face-id (position (- SubX tmp) 1 (- SubZ tmp))))) "BulkPElectrodeInterface")
-;;(sdedr:define-gaussian-profile "PElectrodeDoping" "BoronActiveConcentration" "PeakPos" 0  "PeakVal" ElectrodeCon "ValueAtDepth" SubCon "Depth" 0.6 "Gauss" "Factor" 0.3)
 (sdedr:define-erf-profile "PElectrodeDoping" "BoronActiveConcentration" "SymPos" 0 "MaxVal" ElectrodeCon "ValueAtDepth" SubCon "Length" 0.3 "Gauss"  "Factor" 0.3)
 (sdedr:define-analytical-profile-placement "PEDopingPlac" "PElectrodeDoping" "BulkPElectrodeInterface" "Both" "NoReplace" "Eval")
 
-
 (define PCap (sdegeo:create-cylinder (position SubX PolyStartY SubZ)  (position SubX BtmOxide SubZ) CapRadius "Aluminum" "PCapRegion"));;PolySi
-;;(define PCylinder1 (sdegeo:create-cylinder (position SubX 2 SubZ)  (position SubX 4 SubZ) ElectrodeRadius "Silicon" "PContactCylinder"));;PolySi
-;;(sdegeo:bool-unite (list PCap PCylinder1))
-;;(sdedr:define-constant-profile "PCapDoping" "BoronActiveConcentration" ElectrodeCon)
-;;(sdedr:define-constant-profile-region "PCapDopingPlac" "PCapDoping" "PCapRegion")
-
-
 ;;***********************************************************
-;;-----------------------------------------------------------Doping the N Electrode
+;;-----------------------------------------------------------Trimming
 (sdegeo:body-trim 0 OxideThickness 0 SubX SubY SubZ)
 ;;---------------------------------------------------delete Oxide for contact
 (sdegeo:create-cylinder (position (- SubX (+ NContactStartPos 1)) OxideThickness (- SubZ (+ NContactStartPos 1)))  (position (- SubX (+ NContactStartPos 1)) PolyStartY (- SubZ (+ NContactStartPos 1))) 2 "SiO2" "oxide2" )
