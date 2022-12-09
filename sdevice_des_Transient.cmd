@@ -9,8 +9,6 @@
 #set Nitaccpre    7.0e09
 #set Nitdonpre    9.0e09
 #set Qox Qoxpre
-#set Ditacc -1
-#set Ditdon -1
 
 #if "@dose@" == 0
     #set Ditacc  [format %.2e @<Nitaccpre/0.3>@]
